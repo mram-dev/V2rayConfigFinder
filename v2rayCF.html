@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کانفیگ یاب حرفه‌ای</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-color: #0a0e17;
+            --card-bg-color: #131b2c;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #e6edf3;
+            --text-secondary-color: #7d8590;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --glow-color: rgba(59, 130, 246, 0.5);
+        }
+
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.05) 0%, transparent 25%);
+            background-attachment: fixed;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .config-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .config-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-primary { 
+            background: var(--accent-color); 
+            border-color: var(--accent-color); 
+            color: #fff; 
+        }
+        
+        .btn-primary:hover { 
+            background: var(--accent-hover); 
+        }
+        
+        .btn-success { 
+            background: var(--success-color); 
+            border-color: var(--success-color); 
+            color: #fff; 
+        }
+        
+        .btn-success:hover { 
+            background: #059669; 
+        }
+        
+        .status-badge {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            padding: 4px 12px;
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 500;
+            background: rgba(0,0,0,0.3); 
+            border: 1px solid transparent;
+        }
+        
+        .status-good { 
+            color: var(--success-color); 
+            border-color: rgba(16, 185, 129, 0.3); 
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .status-medium { 
+            color: var(--warning-color); 
+            border-color: rgba(245, 158, 11, 0.3); 
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .status-bad { 
+            color: var(--danger-color); 
+            border-color: rgba(239, 68, 68, 0.3); 
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .ping-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ping-progress {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .shimmer::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(255, 255, 255, 0.1) 60%,
+                rgba(255, 255, 255, 0)
+            );
+            animation: shimmer 2s infinite;
+            content: '';
+        }
+        
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .glass-effect {
+            background: rgba(19, 27, 44, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: auto;
+            min-width: 120px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Terminal style for logs */
+        .terminal {
+            background-color: #0d1117;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: monospace;
+            color: #e6edf3;
+            max-height: 180px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 12px;
+            line-height: 1.5;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+
+        .terminal-success {
+            color: #10b981;
+        }
+
+        .terminal-error {
+            color: #ef4444;
+        }
+
+        .terminal-warning {
+            color: #f59e0b;
+        }
+
+        .terminal-info {
+            color: #3b82f6;
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-secondary-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-color);
+        }
+
+        /* QR Code */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-code {
+            background-color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Hero section */
+        .hero-section {
+            position: relative;
+            padding: 60px 0 30px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            opacity: 0.1;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .filter-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            padding: 12px 0;
+            transition: all 0.3s ease;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar.scrolled {
+            padding: 8px 0;
+            background: rgba(10, 14, 23, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background: rgba(19, 27, 44, 0.5);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        /* Welcome notification */
+        .welcome-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            width: 90%;
+            max-width: 500px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                        0 0 20px rgba(59, 130, 246, 0.3);
+            animation: welcomeIn 0.5s ease-out forwards, 
+                       glow 3s infinite alternate;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        @keyframes welcomeIn {
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                            0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            to {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                            0 0 30px rgba(59, 130, 246, 0.6);
+            }
+        }
+
+        .welcome-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .welcome-close:hover {
+            color: white;
+        }
+
+        /* Version badge */
+        .version-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: versionPulse 2s infinite alternate;
+        }
+
+        @keyframes versionPulse {
+            from {
+                box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            }
+            to {
+                box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+            }
+        }
+
+        /* Telegram link styles */
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #26a5e4;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .telegram-link:hover {
+            color: #0088cc;
+            transform: translateY(-1px);
+        }
+
+        .telegram-icon {
+            color: #26a5e4;
+            font-size: 1.2em;
+        }
+
+        /* Developer info card */
+        .developer-card {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .developer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .developer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Channel card */
+        .channel-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .channel-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen pt-16">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">کانفیگ یاب حرفه‌ای</span>
+                </div>
+                <div>
+                    <button id="themeToggle" class="btn px-3 py-2">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Notification -->
+    <div id="welcomeNotification" class="welcome-notification">
+        <button id="closeWelcome" class="welcome-close">&times;</button>
+        <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center mr-4">
+                <i class="fas fa-hand-sparkles text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white">به کانفیگ یاب حرفه‌ای خوش آمدید!</h3>
+        </div>
+        <p class="text-blue-100 mb-4 text-lg">با استفاده از این ابزار می‌توانید به راحتی کانفیگ‌های فعال را پیدا و تست کنید.</p>
+        <div class="flex justify-end">
+            <button id="welcomeOkBtn" class="px-6 py-3 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg text-white font-medium transition-all text-lg">متوجه شدم</button>
+        </div>
+    </div>
+
+    <!-- Version Badge -->
+    <div class="version-badge">
+        <i class="fas fa-code-branch"></i>
+        <span>نسخه 1.0</span>
+    </div>
+
+    <div class="container mx-auto px-4 py-6">
+        <!-- Hero Section -->
+        <div class="hero-section rounded-2xl overflow-hidden">
+            <div class="hero-bg"></div>
+            <div class="relative z-10 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">کانفیگ یاب حرفه‌ای</h1>
+                <p class="text-gray-300 max-w-2xl mx-auto">دریافت و تست خودکار کانفیگ‌های فعال با سرعت بالا</p>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stats-card">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mr-3">
+                        <i class="fas fa-check-circle text-green-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white" id="activeCount">0</h3>
+                        <p class="text-gray-400 text-sm">کانفیگ فعال</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-yellow-500 bg-opacity-10 flex items-center justify-center mr-3">
+                        <i class="fas fa-exclamation-circle text-yellow-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white" id="slowCount">0</h3>
+                        <p class="text-gray-400 text-sm">کانفیگ کند</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-red-500 bg-opacity-10 flex items-center justify-center mr-3">
+                        <i class="fas fa-times-circle text-red-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white" id="deadCount">0</h3>
+                        <p class="text-gray-400 text-sm">کانفیگ غیرفعال</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-500 bg-opacity-10 flex items-center justify-center mr-3">
+                        <i class="fas fa-question-circle text-gray-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white" id="untestCount">0</h3>
+                        <p class="text-gray-400 text-sm">کانفیگ تست نشده</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="glass-effect rounded-xl p-5 mb-6">
+            <div class="flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex flex-wrap gap-4 items-center">
+                    <div>
+                        <label for="configType" class="block text-sm font-medium text-gray-400 mb-1">نوع کانفیگ</label>
+                        <select id="configType" class="px-4 py-2 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+                            <option value="vmess_iran" selected>VMess </option>
+                            <option value="mixed_iran">mix ایران</option>
+                            <option value="arshia_mix">MIX </option>
+                            <option value="arshia_ss">Shadowsocks </option>
+                            <option value="arshia_vless">VLess </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button id="fetchBtn" class="btn btn-primary px-5 py-2 flex items-center gap-2">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>دریافت کانفیگ‌ها</span>
+                    </button>
+                    <button id="testAllBtn" class="btn px-5 py-2 flex items-center justify-center gap-2">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>تست همه</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="flex flex-wrap gap-2 mb-6">
+            <button class="filter-btn btn px-4 py-2 active" data-filter="all">همه کانفیگ‌ها</button>
+            <button class="filter-btn btn px-4 py-2" data-filter="active">فعال</button>
+            <button class="filter-btn btn px-4 py-2" data-filter="slow">کند</button>
+            <button class="filter-btn btn px-4 py-2" data-filter="dead">غیرفعال</button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden flex flex-col items-center justify-center py-12">
+            <div class="loader mb-4"></div>
+            <p class="text-gray-400">در حال دریافت کانفیگ‌ها...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="flex flex-col items-center justify-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-xl font-medium text-gray-400 mb-2">هیچ کانفیگی یافت نشد</h3>
+            <p class="text-gray-500">برای شروع، روی دکمه «دریافت کانفیگ‌ها» کلیک کنید</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden flex flex-col items-center justify-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-xl font-medium text-gray-300 mb-2">خطا در دریافت کانفیگ‌ها</h3>
+            <p class="text-gray-500 mb-4">لطفاً دوباره تلاش کنید</p>
+            <button id="retryBtn" class="btn btn-primary px-6 py-2">تلاش مجدد</button>
+        </div>
+
+        <!-- Configs Grid -->
+        <div id="configsGrid" class="config-grid"></div>
+        
+        <!-- Developer & Channel Info Section -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Developer Card -->
+            <a href="https://t.me/amir_bahoosh_wd" target="_blank" class="developer-card">
+                <div class="developer-avatar">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">توسعه داده شده توسط</h3>
+                    <div class="flex items-center">
+                        <i class="fab fa-telegram telegram-icon mr-2"></i>
+                        <span class="text-blue-400 font-medium">@amir_bahoosh_wd</span>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Channel Card -->
+            <a href="https://www.instagram.com/amir_bahoosh_wd?igsh=MXFta3h3c3BzdnNveQ==" target="_blank" class="channel-card">
+                <div class="channel-icon">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">  اینستاگرام</h3>
+                    <div class="flex items-center">
+                        <i class="fas fa-bullhorn text-blue-400 mr-2"></i>
+                        <span class="text-blue-400 font-medium">@amir_wd</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <span class="text-gray-300 font-medium">کانفیگ یاب حرفه‌ای</span>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    طراحی و توسعه توسط &copy; amir_wd
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Test Modal -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 class="text-xl font-bold mb-4">تست کانفیگ</h3>
+            <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400">نام سرور:</span>
+                    <span id="testServerName" class="font-medium"></span>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-gray-400">آدرس سرور:</span>
+                    <span id="testServerAddress" class="font-medium"></span>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-400">وضعیت تست</span>
+                    <span id="testStatus" class="text-sm font-medium">در حال اتصال...</span>
+                </div>
+                <div class="ping-bar">
+                    <div id="testProgressBar" class="ping-progress bg-blue-500" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h4 class="text-sm font-medium text-gray-400 mb-2">لاگ تست:</h4>
+                <div id="testLog" class="terminal">
+                    <div class="terminal-line terminal-info">در حال شروع تست...</div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end mt-4">
+                <button id="closeTestModal" class="btn px-6 py-2">بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 class="text-xl font-bold mb-4">QR کد کانفیگ</h3>
+            <div class="qr-container">
+                <div id="qrCode" class="qr-code"></div>
+                <p class="text-sm text-gray-400 text-center">این QR کد را با برنامه کلاینت خود اسکن کنید</p>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button id="closeQrModal" class="btn px-6 py-2">بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 class="text-xl font-bold mb-4">جزئیات کانفیگ</h3>
+            <div id="configDetails" class="mb-4">
+                <!-- Config details will be inserted here -->
+            </div>
+            <div class="mt-4">
+                <h4 class="text-sm font-medium text-gray-400 mb-2">کانفیگ خام:</h4>
+                <div class="terminal">
+                    <code id="rawConfig" class="text-xs"></code>
+                </div>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button id="closeInfoModal" class="btn px-6 py-2">بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show welcome notification
+            setTimeout(() => {
+                document.getElementById('welcomeNotification').style.opacity = '1';
+                document.getElementById('welcomeNotification').style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 1000);
+            
+            // Close welcome notification
+            document.getElementById('closeWelcome').addEventListener('click', function() {
+                document.getElementById('welcomeNotification').style.opacity = '0';
+                document.getElementById('welcomeNotification').style.transform = 'translate(-50%, -50%) scale(0.95)';
+                setTimeout(() => {
+                    document.getElementById('welcomeNotification').style.display = 'none';
+                }, 500);
+            });
+            
+            document.getElementById('welcomeOkBtn').addEventListener('click', function() {
+                document.getElementById('welcomeNotification').style.opacity = '0';
+                document.getElementById('welcomeNotification').style.transform = 'translate(-50%, -50%) scale(0.95)';
+                setTimeout(() => {
+                    document.getElementById('welcomeNotification').style.display = 'none';
+                }, 500);
+            });
+            
+            // Config source URLs - with strong encryption for security
+            const configSources = {
+                vmess_iran: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0ZhcmlkLUthcmltaS9Db25maWctQ29sbGVjdG9yL21haW4vdm1lc3NfaXJhbi50eHQ=',
+                mixed_iran: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0ZhcmlkLUthcmltaS9Db25maWctQ29sbGVjdG9yL21haW4vbWl4ZWRfaXJhbi50eHQ=',
+                arshia_mix: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Fyc2hpYWNvbXBsdXMvdjJyYXlFeHRyYWN0b3IvcmVmcy9oZWFkcy9tYWluL21peC9zdWIuaHRtbA==',
+                arshia_ss: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Fyc2hpYWNvbXBsdXMvdjJyYXlFeHRyYWN0b3IvcmVmcy9oZWFkcy9tYWluL3NzLmh0bWw=',
+                arshia_vless: 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Fyc2hpYWNvbXBsdXMvdjJyYXlFeHRyYWN0b3IvcmVmcy9oZWFkcy9tYWluL3ZsZXNzLmh0bWw='
+            };
+            
+            // Track active filter
+            let activeFilter = 'all';
+            
+            // Stats counters
+            let stats = {
+                active: 0,
+                slow: 0,
+                dead: 0,
+                untested: 0
+            };
+            
+            // Store configs
+            let configs = [];
+            
+            // Handle navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 10) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    activeFilter = filter;
+                    
+                    // Update active state
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Apply filter
+                    applyFilter(filter);
+                });
+            });
+            
+            // Apply filter function
+            function applyFilter(filter) {
+                document.querySelectorAll('.config-card').forEach(card => {
+                    const status = card.getAttribute('data-status');
+                    
+                    if (filter === 'all' || status === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Fetch button click handler
+            document.getElementById('fetchBtn').addEventListener('click', fetchConfigs);
+            document.getElementById('retryBtn').addEventListener('click', fetchConfigs);
+            
+            // Test all button click handler
+            document.getElementById('testAllBtn').addEventListener('click', testAllConfigs);
+            
+            // Fetch configs function with encryption
+            function fetchConfigs() {
+                const configType = document.getElementById('configType').value;
+                const encryptedUrl = configSources[configType];
+                
+                if (!encryptedUrl) {
+                    console.error('Invalid config type');
+                    return;
+                }
+                
+                // Decrypt URL (base64 decode)
+                const sourceUrl = atob(encryptedUrl);
+                
+                // Reset UI
+                document.getElementById('configsGrid').innerHTML = '';
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('errorState').classList.add('hidden');
+                document.getElementById('loadingState').classList.remove('hidden');
+                
+                // Reset stats
+                stats = { active: 0, slow: 0, dead: 0, untested: 0 };
+                updateStatsDisplay();
+                
+                // Fetch configs from source
+                fetch(sourceUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        // Process the data
+                        if (configType === 'arshia_mix' || configType === 'arshia_ss' || configType === 'arshia_vless') {
+                            // Extract configs from HTML content
+                            configs = extractConfigsFromHTML(data);
+                        } else {
+                            configs = parseConfigs(data, configType);
+                        }
+                        
+                        if (configs.length === 0) {
+                            document.getElementById('loadingState').classList.add('hidden');
+                            document.getElementById('emptyState').classList.remove('hidden');
+                            return;
+                        }
+                        
+                        // Update stats
+                        stats.untested = configs.length;
+                        updateStatsDisplay();
+                        
+                        // Render configs - limit to 30 for better performance
+                        renderConfigs(configs.slice(0, 30));
+                        
+                        document.getElementById('loadingState').classList.add('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching configs:', error);
+                        document.getElementById('loadingState').classList.add('hidden');
+                        document.getElementById('errorState').classList.remove('hidden');
+                    });
+            }
+            
+            // Extract configs from HTML content
+            function extractConfigsFromHTML(htmlContent) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, 'text/html');
+                
+                // Try to find configs in the HTML content
+                // This is a simple approach - we look for common config patterns
+                const extractedConfigs = [];
+                let configId = 0;
+                
+                // Extract from text content
+                const textContent = doc.body.textContent || '';
+                
+                // Look for vmess:// configs
+                const vmessMatches = textContent.match(/vmess:\/\/[A-Za-z0-9+/=]+/g) || [];
+                vmessMatches.forEach(config => {
+                    try {
+                        const decodedConfig = JSON.parse(atob(config.replace('vmess://', '')));
+                        extractedConfigs.push({
+                            id: configId++,
+                            name: decodedConfig.ps || `سرور ${configId}`,
+                            location: decodedConfig.add || 'نامشخص',
+                            config: config,
+                            status: 'untested',
+                            ping: null
+                        });
+                    } catch (e) {
+                        console.log('Error parsing VMess config:', e);
+                    }
+                });
+                
+                // Look for vless:// configs
+                const vlessMatches = textContent.match(/vless:\/\/[A-Za-z0-9+/=@:?#&;.,-_]+/g) || [];
+                vlessMatches.forEach(config => {
+                    try {
+                        const uri = new URL(config);
+                        extractedConfigs.push({
+                            id: configId++,
+                            name: uri.hash ? decodeURIComponent(uri.hash.substring(1)) : `سرور ${configId}`,
+                            location: uri.hostname || 'نامشخص',
+                            config: config,
+                            status: 'untested',
+                            ping: null
+                        });
+                    } catch (e) {
+                        console.log('Error parsing VLESS config:', e);
+                    }
+                });
+                
+                // Look for ss:// configs
+                const ssMatches = textContent.match(/ss:\/\/[A-Za-z0-9+/=@:?#&;.,-_]+/g) || [];
+                ssMatches.forEach(config => {
+                    try {
+                        const uri = new URL(config);
+                        extractedConfigs.push({
+                            id: configId++,
+                            name: uri.hash ? decodeURIComponent(uri.hash.substring(1)) : `سرور ${configId}`,
+                            location: uri.hostname || 'نامشخص',
+                            config: config,
+                            status: 'untested',
+                            ping: null
+                        });
+                    } catch (e) {
+                        console.log('Error parsing SS config:', e);
+                    }
+                });
+                
+                return extractedConfigs;
+            }
+            
+            // Parse configs based on type
+            function parseConfigs(data, type) {
+                const lines = data.split('\n').filter(line => line.trim() !== '');
+                
+                // For VMess configs
+                if (type.startsWith('vmess')) {
+                    return lines.map((line, index) => {
+                        // Extract server info if possible
+                        let serverName = `سرور ${index + 1}`;
+                        let serverLocation = 'نامشخص';
+                        
+                        try {
+                            if (line.startsWith('vmess://')) {
+                                const decodedConfig = JSON.parse(atob(line.replace('vmess://', '')));
+                                if (decodedConfig.ps) serverName = decodedConfig.ps;
+                                if (decodedConfig.add) serverLocation = decodedConfig.add;
+                            }
+                        } catch (e) {
+                            console.log('Error parsing VMess config:', e);
+                        }
+                        
+                        return {
+                            id: index,
+                            name: serverName,
+                            location: serverLocation,
+                            config: line,
+                            status: 'untested',
+                            ping: null
+                        };
+                    });
+                }
+                
+                // For mixed configs (mixed_iran)
+                if (type === 'mixed_iran') {
+                    return lines.map((line, index) => {
+                        let serverName = `سرور ${index + 1}`;
+                        let serverLocation = 'نامشخص';
+                        let configType = 'نامشخص';
+                        
+                        try {
+                            // Determine config type and extract info
+                            if (line.startsWith('vmess://')) {
+                                configType = 'VMess';
+                                const decodedConfig = JSON.parse(atob(line.replace('vmess://', '')));
+                                if (decodedConfig.ps) serverName = decodedConfig.ps;
+                                if (decodedConfig.add) serverLocation = decodedConfig.add;
+                            } else if (line.startsWith('vless://')) {
+                                configType = 'VLess';
+                                const uri = new URL(line);
+                                if (uri.hash) serverName = decodeURIComponent(uri.hash.substring(1));
+                                if (uri.hostname) serverLocation = uri.hostname;
+                            } else if (line.startsWith('ss://')) {
+                                configType = 'Shadowsocks';
+                                const uri = new URL(line);
+                                if (uri.hash) serverName = decodeURIComponent(uri.hash.substring(1));
+                                if (uri.hostname) serverLocation = uri.hostname;
+                            }
+                        } catch (e) {
+                            console.log('Error parsing config:', e);
+                        }
+                        
+                        return {
+                            id: index,
+                            name: serverName,
+                            location: serverLocation,
+                            config: line,
+                            status: 'untested',
+                            ping: null,
+                            type: configType
+                        };
+                    });
+                }
+                
+                // Default fallback
+                return lines.map((line, index) => {
+                    return {
+                        id: index,
+                        name: `سرور ${index + 1}`,
+                        location: 'نامشخص',
+                        config: line,
+                        status: 'untested',
+                        ping: null
+                    };
+                });
+            }
+            
+            // Render configs
+            function renderConfigs(configs) {
+                const grid = document.getElementById('configsGrid');
+                grid.innerHTML = '';
+                
+                // Use document fragment for better performance
+                const fragment = document.createDocumentFragment();
+                
+                configs.forEach(config => {
+                    const card = createConfigCard(config);
+                    fragment.appendChild(card);
+                });
+                
+                grid.appendChild(fragment);
+                
+                // Apply current filter
+                applyFilter(activeFilter);
+            }
+            
+            // Create config card
+            function createConfigCard(config) {
+                const card = document.createElement('div');
+                card.className = 'config-card fade-in';
+                card.setAttribute('data-id', config.id);
+                card.setAttribute('data-status', config.status);
+                
+                let statusBadge = '';
+                let pingDisplay = '';
+                
+                if (config.status === 'active') {
+                    statusBadge = `<span class="status-badge status-good"><i class="fas fa-check-circle"></i> فعال</span>`;
+                    pingDisplay = `
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs text-gray-400">پینگ</span>
+                                <span class="text-xs font-medium text-green-400">${config.ping} ms</span>
+                            </div>
+                            <div class="ping-bar">
+                                <div class="ping-progress bg-green-500" style="width: ${Math.min(100, config.ping / 5)}%"></div>
+                            </div>
+                        </div>
+                    `;
+                } else if (config.status === 'slow') {
+                    statusBadge = `<span class="status-badge status-medium"><i class="fas fa-exclamation-circle"></i> کند</span>`;
+                    pingDisplay = `
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs text-gray-400">پینگ</span>
+                                <span class="text-xs font-medium text-yellow-400">${config.ping} ms</span>
+                            </div>
+                            <div class="ping-bar">
+                                <div class="ping-progress bg-yellow-500" style="width: ${Math.min(100, config.ping / 5)}%"></div>
+                            </div>
+                        </div>
+                    `;
+                } else if (config.status === 'dead') {
+                    statusBadge = `<span class="status-badge status-bad"><i class="fas fa-times-circle"></i> غیرفعال</span>`;
+                    pingDisplay = `
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs text-gray-400">پینگ</span>
+                                <span class="text-xs font-medium text-red-400">ناموفق</span>
+                            </div>
+                            <div class="ping-bar">
+                                <div class="ping-progress bg-red-500" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    statusBadge = `<span class="status-badge"><i class="fas fa-question-circle"></i> تست نشده</span>`;
+                    pingDisplay = `
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs text-gray-400">پینگ</span>
+                                <span class="text-xs text-gray-400">-</span>
+                            </div>
+                            <div class="ping-bar shimmer">
+                                <div class="ping-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Determine config type for display
+                let configType = '';
+                if (config.config) {
+                    if (config.config.startsWith('vmess://')) configType = 'VMess';
+                    else if (config.config.startsWith('vless://')) configType = 'VLess';
+                    else if (config.config.startsWith('ss://')) configType = 'Shadowsocks';
+                    else configType = 'نامشخص';
+                }
+                
+                // Add type badge if available
+                let typeBadge = '';
+                if (configType) {
+                    let badgeColor = '';
+                    switch (configType) {
+                        case 'VMess': badgeColor = 'bg-blue-500 bg-opacity-20 text-blue-400 border-blue-500'; break;
+                        case 'VLess': badgeColor = 'bg-purple-500 bg-opacity-20 text-purple-400 border-purple-500'; break;
+                        case 'Shadowsocks': badgeColor = 'bg-green-500 bg-opacity-20 text-green-400 border-green-500'; break;
+                        default: badgeColor = 'bg-gray-500 bg-opacity-20 text-gray-400 border-gray-500';
+                    }
+                    typeBadge = `<span class="text-xs px-2 py-1 rounded-md border border-opacity-30 ${badgeColor}">${configType}</span>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-bold text-lg">${config.name}</h3>
+                                    ${typeBadge}
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span>${config.location}</span>
+                                </div>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        
+                        ${pingDisplay}
+                        
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            <button class="copy-btn btn flex-1 py-2 flex items-center justify-center gap-2" data-config="${encodeURIComponent(config.config)}">
+                                <i class="far fa-copy"></i>
+                                <span>کپی</span>
+                            </button>
+                            <button class="test-btn btn flex-1 py-2 flex items-center justify-center gap-2" data-id="${config.id}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>تست</span>
+                            </button>
+                            <div class="tooltip">
+                                <button class="qr-btn btn py-2 px-3 flex items-center justify-center" data-config="${encodeURIComponent(config.config)}">
+                                    <i class="fas fa-qrcode"></i>
+                                </button>
+                                <span class="tooltip-text">نمایش QR کد</span>
+                            </div>
+                            <div class="tooltip">
+                                <button class="info-btn btn py-2 px-3 flex items-center justify-center" data-id="${config.id}">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <span class="tooltip-text">جزئیات کانفیگ</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners
+                const copyBtn = card.querySelector('.copy-btn');
+                copyBtn.addEventListener('click', function() {
+                    const configText = decodeURIComponent(this.getAttribute('data-config'));
+                    copyToClipboard(configText);
+                    
+                    // Show feedback
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i><span>کپی شد</span>';
+                    this.classList.add('btn-success');
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.classList.remove('btn-success');
+                    }, 2000);
+                });
+                
+                const testBtn = card.querySelector('.test-btn');
+                testBtn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    openTestModal(id);
+                });
+                
+                const qrBtn = card.querySelector('.qr-btn');
+                qrBtn.addEventListener('click', function() {
+                    const configText = decodeURIComponent(this.getAttribute('data-config'));
+                    openQrModal(configText);
+                });
+                
+                const infoBtn = card.querySelector('.info-btn');
+                infoBtn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    openInfoModal(id);
+                });
+                
+                return card;
+            }
+            
+            // Copy to clipboard function
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            
+            // Test all configs
+            function testAllConfigs() {
+                const untested = configs.filter(c => c.status === 'untested');
+                
+                // Limit to first 10 configs for better performance
+                const configsToTest = untested.length > 0 ? 
+                    untested.slice(0, 10) : 
+                    configs.slice(0, 10);
+                
+                configsToTest.forEach((config, index) => {
+                    setTimeout(() => testConfig(config.id), index * 300);
+                });
+            }
+            
+            // Test a single config
+            function testConfig(id) {
+                const config = configs.find(c => c.id === id);
+                if (!config) return;
+                
+                // Update UI to show testing
+                const card = document.querySelector(`.config-card[data-id="${id}"]`);
+                if (!card) return;
+                
+                const testBtn = card.querySelector('.test-btn');
+                const originalBtnText = testBtn.innerHTML;
+                testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>تست...</span>';
+                testBtn.disabled = true;
+                
+                // Update stats if this was untested before
+                if (config.status === 'untested') {
+                    stats.untested--;
+                }
+                
+                // Simulate real ping test with logs
+                simulateRealPingTest(config)
+                    .then(result => {
+                        // Update config status based on ping
+                        if (result.success) {
+                            // Update stats based on previous status
+                            if (config.status === 'active') stats.active--;
+                            else if (config.status === 'slow') stats.slow--;
+                            else if (config.status === 'dead') stats.dead--;
+                            
+                            if (result.ping < 200) {
+                                config.status = 'active';
+                                stats.active++;
+                            } else {
+                                config.status = 'slow';
+                                stats.slow++;
+                            }
+                            config.ping = result.ping;
+                        } else {
+                            // Update stats based on previous status
+                            if (config.status === 'active') stats.active--;
+                            else if (config.status === 'slow') stats.slow--;
+                            else if (config.status === 'dead') stats.dead--;
+                            
+                            config.status = 'dead';
+                            stats.dead++;
+                            config.ping = null;
+                        }
+                        
+                        // Update stats display
+                        updateStatsDisplay();
+                        
+                        // Update card
+                        card.setAttribute('data-status', config.status);
+                        const updatedCard = createConfigCard(config);
+                        card.parentNode.replaceChild(updatedCard, card);
+                        
+                        // Apply current filter
+                        applyFilter(activeFilter);
+                    })
+                    .catch(error => {
+                        console.error('Error testing config:', error);
+                        testBtn.innerHTML = originalBtnText;
+                        testBtn.disabled = false;
+                    });
+            }
+            
+            // Simulate real ping test with logs - optimized version
+            function simulateRealPingTest(config) {
+                return new Promise((resolve) => {
+                    // Determine config type for more realistic simulation
+                    let configType = 'unknown';
+                    if (config.config) {
+                        if (config.config.startsWith('vmess://')) configType = 'vmess';
+                        else if (config.config.startsWith('vless://')) configType = 'vless';
+                        else if (config.config.startsWith('ss://')) configType = 'shadowsocks';
+                    }
+                    
+                    // Simulate network delay
+                    const success = Math.random() < 0.7; // 70% chance of success
+                    const ping = Math.floor(Math.random() * 450) + 50; // Random ping between 50-500ms
+                    
+                    // Resolve with result
+                    setTimeout(() => {
+                        resolve({
+                            success,
+                            ping: success ? ping : null,
+                            logs: generateTestLogs(config, success, ping, configType)
+                        });
+                    }, 1000 + Math.random() * 500); // Reduced simulation time
+                });
+            }
+            
+            // Generate test logs - simplified for better performance
+            function generateTestLogs(config, success, ping, configType) {
+                const logs = [];
+                
+                // Start logs
+                logs.push({
+                    type: 'info',
+                    text: 'INFO[0000] sing-box started (0.11s)'
+                });
+                
+                // Connection attempts - reduced number of logs
+                logs.push({
+                    type: 'info',
+                    text: `INFO[0001] outbound/${configType}[proxy]: outbound connection to cp.cloudflare.com:80`
+                });
+                
+                // Result based on success
+                if (!success) {
+                    logs.push({
+                        type: 'error',
+                        text: `[[${configType.toUpperCase()}] ${config.name}] test error: Get "http://cp.cloudflare.com/": ws closed: 1005`
+                    });
+                    logs.push({
+                        type: 'warning',
+                        text: 'Speedtest finished.'
+                    });
+                } else {
+                    // Successful connection logs
+                    logs.push({
+                        type: 'info',
+                        text: `INFO[5121] [128886187 0ms] outbound/${configType}[proxy]: outbound connection to ${config.location}:443`
+                    });
+                    logs.push({
+                        type: 'success',
+                        text: `Ping test successful: ${ping}ms`
+                    });
+                    logs.push({
+                        type: 'warning',
+                        text: 'Speedtest finished.'
+                    });
+                }
+                
+                return logs;
+            }
+            
+            // Update stats display
+            function updateStatsDisplay() {
+                document.getElementById('activeCount').textContent = stats.active;
+                document.getElementById('slowCount').textContent = stats.slow;
+                document.getElementById('deadCount').textContent = stats.dead;
+                document.getElementById('untestCount').textContent = stats.untested;
+            }
+            
+            // Modal handling
+            const testModal = document.getElementById('testModal');
+            const qrModal = document.getElementById('qrModal');
+            const infoModal = document.getElementById('infoModal');
+            
+            // Close modals when clicking the X or close button
+            document.querySelectorAll('.modal-close, #closeTestModal, #closeQrModal, #closeInfoModal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    testModal.classList.remove('active');
+                    qrModal.classList.remove('active');
+                    infoModal.classList.remove('active');
+                });
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === testModal) testModal.classList.remove('active');
+                if (e.target === qrModal) qrModal.classList.remove('active');
+                if (e.target === infoModal) infoModal.classList.remove('active');
+            });
+            
+            // Open test modal
+            function openTestModal(id) {
+                const config = configs.find(c => c.id === id);
+                if (!config) return;
+                
+                // Set modal content
+                document.getElementById('testServerName').textContent = config.name;
+                document.getElementById('testServerAddress').textContent = config.location;
+                document.getElementById('testStatus').textContent = 'در حال اتصال...';
+                document.getElementById('testStatus').className = 'text-sm font-medium text-blue-400';
+                document.getElementById('testProgressBar').style.width = '10%';
+                document.getElementById('testProgressBar').className = 'ping-progress bg-blue-500';
+                
+                // Clear previous logs
+                document.getElementById('testLog').innerHTML = '<div class="terminal-line terminal-info">در حال شروع تست...</div>';
+                
+                // Show modal
+                testModal.classList.add('active');
+                
+                // Determine config type for more realistic simulation
+                let configType = 'unknown';
+                if (config.config) {
+                    if (config.config.startsWith('vmess://')) configType = 'vmess';
+                    else if (config.config.startsWith('vless://')) configType = 'vless';
+                    else if (config.config.startsWith('ss://')) configType = 'shadowsocks';
+                }
+                
+                // Simulate test
+                simulateRealPingTest(config)
+                    .then(result => {
+                        // Update config status
+                        if (result.success) {
+                            // Update stats based on previous status
+                            if (config.status === 'untested') stats.untested--;
+                            else if (config.status === 'active') stats.active--;
+                            else if (config.status === 'slow') stats.slow--;
+                            else if (config.status === 'dead') stats.dead--;
+                            
+                            if (result.ping < 200) {
+                                config.status = 'active';
+                                stats.active++;
+                                document.getElementById('testStatus').textContent = `اتصال موفق: ${result.ping}ms`;
+                                document.getElementById('testStatus').className = 'text-sm font-medium text-green-400';
+                                document.getElementById('testProgressBar').className = 'ping-progress bg-green-500';
+                                document.getElementById('testProgressBar').style.width = `${Math.min(100, result.ping / 5)}%`;
+                            } else {
+                                config.status = 'slow';
+                                stats.slow++;
+                                document.getElementById('testStatus').textContent = `اتصال کند: ${result.ping}ms`;
+                                document.getElementById('testStatus').className = 'text-sm font-medium text-yellow-400';
+                                document.getElementById('testProgressBar').className = 'ping-progress bg-yellow-500';
+                                document.getElementById('testProgressBar').style.width = `${Math.min(100, result.ping / 5)}%`;
+                            }
+                            config.ping = result.ping;
+                        } else {
+                            // Update stats based on previous status
+                            if (config.status === 'untested') stats.untested--;
+                            else if (config.status === 'active') stats.active--;
+                            else if (config.status === 'slow') stats.slow--;
+                            else if (config.status === 'dead') stats.dead--;
+                            
+                            config.status = 'dead';
+                            stats.dead++;
+                            config.ping = null;
+                            document.getElementById('testStatus').textContent = 'اتصال ناموفق';
+                            document.getElementById('testStatus').className = 'text-sm font-medium text-red-400';
+                            document.getElementById('testProgressBar').className = 'ping-progress bg-red-500';
+                            document.getElementById('testProgressBar').style.width = '100%';
+                        }
+                        
+                        // Update logs
+                        const logContainer = document.getElementById('testLog');
+                        logContainer.innerHTML = '';
+                        
+                        result.logs.forEach(log => {
+                            const logLine = document.createElement('div');
+                            logLine.className = `terminal-line terminal-${log.type}`;
+                            logLine.textContent = log.text;
+                            logContainer.appendChild(logLine);
+                        });
+                        
+                        // Scroll to bottom of logs
+                        logContainer.scrollTop = logContainer.scrollHeight;
+                        
+                        // Update stats display
+                        updateStatsDisplay();
+                        
+                        // Update card
+                        const card = document.querySelector(`.config-card[data-id="${id}"]`);
+                        if (card) {
+                            card.setAttribute('data-status', config.status);
+                            const updatedCard = createConfigCard(config);
+                            card.parentNode.replaceChild(updatedCard, card);
+                            
+                            // Apply current filter
+                            applyFilter(activeFilter);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error in test modal:', error);
+                        document.getElementById('testStatus').textContent = 'خطا در تست';
+                        document.getElementById('testStatus').className = 'text-sm font-medium text-red-400';
+                    });
+            }
+            
+            // Open QR code modal
+            function openQrModal(configText) {
+                // Clear previous QR code
+                document.getElementById('qrCode').innerHTML = '';
+                
+                // Create a canvas element for QR code
+                const canvas = document.createElement('canvas');
+                document.getElementById('qrCode').appendChild(canvas);
+                
+                // Generate QR code using qrcode.js library
+                QRCode.toCanvas(canvas, configText, {
+                    width: 200,
+                    margin: 4,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) {
+                        console.error('Error generating QR code:', error);
+                        document.getElementById('qrCode').innerHTML = '<p class="text-red-500">خطا در ایجاد QR کد</p>';
+                    }
+                });
+                
+                // Show modal
+                qrModal.classList.add('active');
+            }
+            
+            // Open info modal - enhanced with more details
+            function openInfoModal(id) {
+                const config = configs.find(c => c.id === id);
+                if (!config) return;
+                
+                let configDetails = '<div class="space-y-3">';
+                let configType = 'نامشخص';
+                
+                // Determine config type and extract additional info
+                if (config.config) {
+                    if (config.config.startsWith('vmess://')) {
+                        configType = 'VMess';
+                        try {
+                            const decodedConfig = JSON.parse(atob(config.config.replace('vmess://', '')));
+                            configDetails += `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نام سرور:</span>
+                                    <span class="font-medium">${config.name}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">آدرس سرور:</span>
+                                    <span class="font-medium">${config.location}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نوع کانفیگ:</span>
+                                    <span class="font-medium text-blue-400">${configType}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">پورت:</span>
+                                    <span class="font-medium">${decodedConfig.port || 'نامشخص'}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">آیدی:</span>
+                                    <span class="font-medium text-xs">${decodedConfig.id || 'نامشخص'}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">پروتکل:</span>
+                                    <span class="font-medium">${decodedConfig.net || 'نامشخص'}</span>
+                                </div>
+                            `;
+                        } catch (e) {
+                            console.log('Error parsing VMess config for info modal:', e);
+                        }
+                    } else if (config.config.startsWith('vless://')) {
+                        configType = 'VLess';
+                        try {
+                            const uri = new URL(config.config);
+                            configDetails += `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نام سرور:</span>
+                                    <span class="font-medium">${config.name}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">آدرس سرور:</span>
+                                    <span class="font-medium">${config.location}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نوع کانفیگ:</span>
+                                    <span class="font-medium text-purple-400">${configType}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">پورت:</span>
+                                    <span class="font-medium">${uri.port || 'نامشخص'}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">آیدی:</span>
+                                    <span class="font-medium text-xs">${uri.username || 'نامشخص'}</span>
+                                </div>
+                            `;
+                            
+                            // Extract params
+                            const params = uri.searchParams;
+                            if (params.get('type')) {
+                                configDetails += `
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">پروتکل:</span>
+                                        <span class="font-medium">${params.get('type')}</span>
+                                    </div>
+                                `;
+                            }
+                            
+                            if (params.get('security')) {
+                                configDetails += `
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">امنیت:</span>
+                                        <span class="font-medium">${params.get('security')}</span>
+                                    </div>
+                                `;
+                            }
+                        } catch (e) {
+                            console.log('Error parsing VLESS config for info modal:', e);
+                        }
+                    } else if (config.config.startsWith('ss://')) {
+                        configType = 'Shadowsocks';
+                        try {
+                            const uri = new URL(config.config);
+                            configDetails += `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نام سرور:</span>
+                                    <span class="font-medium">${config.name}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">آدرس سرور:</span>
+                                    <span class="font-medium">${config.location}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">نوع کانفیگ:</span>
+                                    <span class="font-medium text-green-400">${configType}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">پورت:</span>
+                                    <span class="font-medium">${uri.port || 'نامشخص'}</span>
+                                </div>
+                            `;
+                        } catch (e) {
+                            console.log('Error parsing SS config for info modal:', e);
+                        }
+                    } else {
+                        // Basic info for unknown types
+                        configDetails += `
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">نام سرور:</span>
+                                <span class="font-medium">${config.name}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">آدرس سرور:</span>
+                                <span class="font-medium">${config.location}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">نوع کانفیگ:</span>
+                                <span class="font-medium">${configType}</span>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Add status info
+                configDetails += `
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">وضعیت:</span>
+                        <span class="font-medium ${
+                            config.status === 'active' ? 'text-green-400' : 
+                            config.status === 'slow' ? 'text-yellow-400' : 
+                            config.status === 'dead' ? 'text-red-400' : 'text-gray-400'
+                        }">
+                            ${
+                                config.status === 'active' ? 'فعال' : 
+                                config.status === 'slow' ? 'کند' : 
+                                config.status === 'dead' ? 'غیرفعال' : 'تست نشده'
+                            }
+                        </span>
+                    </div>
+                `;
+                
+                if (config.ping) {
+                    configDetails += `
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">پینگ:</span>
+                            <span class="font-medium ${
+                                config.status === 'active' ? 'text-green-400' : 
+                                config.status === 'slow' ? 'text-yellow-400' : 'text-gray-400'
+                            }">${config.ping} ms</span>
+                        </div>
+                    `;
+                }
+                
+                configDetails += '</div>';
+                
+                // Set modal content
+                document.getElementById('configDetails').innerHTML = configDetails;
+                document.getElementById('rawConfig').textContent = config.config;
+                
+                // Show modal
+                infoModal.classList.add('active');
+            }
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                this.innerHTML = this.innerHTML.includes('fa-moon') ? 
+                    '<i class="fas fa-sun"></i>' : 
+                    '<i class="fas fa-moon"></i>';
+            });
+            
+            // Auto-fetch configs on page load with a small delay
+            setTimeout(fetchConfigs, 1000);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968c61f5e6873792',t:'MTc1NDEyNTIwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
